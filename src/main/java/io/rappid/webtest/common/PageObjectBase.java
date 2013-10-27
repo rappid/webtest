@@ -20,13 +20,13 @@ public abstract class PageObjectBase extends WebTestBase {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public abstract WebElement getWebElement();
-
     protected PageObjectBase(boolean startValidation) {
         if (startValidation) {
             startValidation();
         }
     }
+
+    public abstract WebElement getWebElement();
 
     protected abstract void startValidation();
 
@@ -75,12 +75,29 @@ public abstract class PageObjectBase extends WebTestBase {
         return getChild(By.cssSelector(cssSelector));
     }
 
+    public Boolean hasChild(By by) {
+        return getChildren(by).size() > 0;
+    }
+
+    public Boolean hasChild(String cssSelector) {
+        try {
+            webTest().disableImplicitlyWait();
+            return hasChild(By.cssSelector(cssSelector));
+        } finally {
+            webTest().enableImplicitlyWait();
+        }
+    }
+
     public WebElement getChild(By by) {
         return getWebElement().findElement(by);
     }
 
     public List<WebElement> getChildren(By by) {
         return getWebElement().findElements(by);
+    }
+
+    public List<WebElement> getChildren(String cssSelector) {
+        return getWebElement().findElements(By.cssSelector(cssSelector));
     }
 
     public WebElementPanel getChildPanel(By by) {

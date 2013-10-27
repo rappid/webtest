@@ -84,9 +84,17 @@ public abstract class WebTest extends WebTestBase {
         RemoteWebDriver driver = webDriverBackend.driver();
         testResult.setAttribute(DRIVER, driver);
 
-        driver.manage().timeouts().implicitlyWait(implicitlyWaitTimeout(), TimeUnit.SECONDS);
+        enableImplicitlyWait();
 
         log.info("Using grid: " + webDriverBackend.toString());
+    }
+
+    public void enableImplicitlyWait() {
+        getWebTest().driver().manage().timeouts().implicitlyWait(implicitlyWaitTimeout(), TimeUnit.SECONDS);
+    }
+
+    public void disableImplicitlyWait() {
+        getWebTest().driver().manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
     }
 
     @AfterMethod(alwaysRun = true)
