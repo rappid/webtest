@@ -20,7 +20,7 @@ public abstract class PageObjectBase extends WebTestBase {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    protected abstract WebElement getWebElement();
+    public abstract WebElement getWebElement();
 
     protected PageObjectBase(boolean startValidation) {
         if (startValidation) {

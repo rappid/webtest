@@ -33,7 +33,7 @@ public class WebElementPanel extends WebElementPanelBase {
     }
 
     @Override
-    protected WebElement getWebElement() {
+    public WebElement getWebElement() {
 
         if (initializedByElement) {
             return element;

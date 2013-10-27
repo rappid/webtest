@@ -16,7 +16,7 @@ public abstract class PageObject extends PageObjectBase {
     }
 
     @Override
-    protected WebElement getWebElement() {
+    public WebElement getWebElement() {
         return get(By.tagName("html"));
     }
 
