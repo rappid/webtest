@@ -35,7 +35,17 @@ public class WebDriverBackend {
         capability.setBrowserName(browser);
 
         capability.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
+
+        String sauceUsername = System.getProperty("SAUCE_USERNAME");
+        String sauceAccessKey = System.getProperty("SAUCE_ACCESS_KEY");
+
+        if (sauceAccessKey != null && sauceUsername != null) {
+            capability.setCapability("username", sauceUsername);
+            capability.setCapability("accessKey", sauceAccessKey);
+        }
+
         setCapability(browser, capability);
+
 
         final URL hubUrl = new URL(url());
 
