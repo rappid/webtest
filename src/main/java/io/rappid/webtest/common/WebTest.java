@@ -27,10 +27,7 @@ public abstract class WebTest extends WebTestBase {
     protected final static ThreadLocal<WebTest> testBackend = new ThreadLocal<WebTest>();
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass());
-    private String host;
-    private int port;
-    private String browser;
-    private XmlTest currentXmlTest;
+    private static ITestContext testContext;
 
     public static WebDriverBackend getWebDriverBackend() {
         return backend.get();
@@ -59,34 +56,35 @@ public abstract class WebTest extends WebTestBase {
         return 5;
     }
 
+
     @BeforeSuite(alwaysRun = true)
     public void beforeSuite(ITestContext context) {
-
-        this.currentXmlTest = context.getCurrentXmlTest();
-
-        this.host = Objects.firstNonNull(getParameter("grid.host"), "localhost");
-        this.port = Integer.parseInt(Objects.firstNonNull(getParameter("grid.port"), "4444"));
-        this.browser = Objects.firstNonNull(getParameter("browser"), "chrome");
+        testContext = context;
     }
 
-    protected String getParameter(String key) {
-        return currentXmlTest.getParameter(key);
+    protected synchronized String getParameter(String key) {
+        return testContext.getCurrentXmlTest().getParameter(key);
     }
 
     @BeforeMethod(alwaysRun = true)
-    public void beforeMethod(ITestResult testResult) throws Exception {
+    public synchronized void beforeMethod(ITestResult testResult) throws Exception {
 
         testBackend.set(this);
 
+        String host = Objects.firstNonNull(getParameter("grid.host"), "localhost");
+        int port = Integer.parseInt(Objects.firstNonNull(getParameter("grid.port"), "4444"));
+        String browser = Objects.firstNonNull(getParameter("browser"), "chrome");
+
         WebDriverBackend webDriverBackend = new WebDriverBackend(host, port, browser);
         backend.set(webDriverBackend);
+
+        log.info("Using grid: " + webDriverBackend.toString());
 
         RemoteWebDriver driver = webDriverBackend.driver();
         testResult.setAttribute(DRIVER, driver);
 
         enableImplicitlyWait();
 
-        log.info("Using grid: " + webDriverBackend.toString());
     }
 
     public void enableImplicitlyWait() {
@@ -98,9 +96,12 @@ public abstract class WebTest extends WebTestBase {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void afterMethod() {
+    public synchronized void afterMethod() {
         try {
-            backend.get().close();
+            WebDriverBackend webDriverBackend = backend.get();
+            if (webDriverBackend != null) {
+                webDriverBackend.close();
+            }
         } catch (Throwable e) {
             log.error("Ignoring error in afterMethod: ", e);
         }
