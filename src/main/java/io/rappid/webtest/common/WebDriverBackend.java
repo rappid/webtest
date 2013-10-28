@@ -18,6 +18,11 @@ import java.util.concurrent.Callable;
  */
 public class WebDriverBackend {
 
+    public static final String SAUCE_ACCESS_KEY = "SAUCE_ACCESS_KEY";
+    public static final String SAUCE_USERNAME = "SAUCE_USERNAME";
+
+    private static final Logger log = LoggerFactory.getLogger(WebDriverBackend.class);
+
     private RemoteWebDriver driver;
 
     private final String host;
@@ -36,10 +41,13 @@ public class WebDriverBackend {
 
         capability.setCapability(CapabilityType.TAKES_SCREENSHOT, true);
 
-        String sauceUsername = System.getProperty("SAUCE_USERNAME");
-        String sauceAccessKey = System.getProperty("SAUCE_ACCESS_KEY");
+        String sauceUsername = System.getProperty(SAUCE_USERNAME, System.getenv(SAUCE_USERNAME));
+        String sauceAccessKey = System.getProperty(SAUCE_ACCESS_KEY, System.getenv(SAUCE_ACCESS_KEY));
 
         if (sauceAccessKey != null && sauceUsername != null) {
+
+            log.info(String.format("Setting username '%s' and accessKey for saucelabs as capability", sauceUsername));
+
             capability.setCapability("username", sauceUsername);
             capability.setCapability("accessKey", sauceAccessKey);
         }
