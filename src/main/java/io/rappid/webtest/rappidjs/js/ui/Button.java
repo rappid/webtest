@@ -18,12 +18,4 @@ public class Button extends WebElementPanel {
     public Button(WebElement element) {
         super(element);
     }
-
-    public void click() {
-        getWebElement().click();
-    }
-
-    public void getText() {
-        getWebElement().getText();
-    }
 }
