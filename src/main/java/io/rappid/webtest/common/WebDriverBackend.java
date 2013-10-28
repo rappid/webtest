@@ -44,7 +44,8 @@ public class WebDriverBackend {
         String sauceUsername = System.getProperty(SAUCE_USERNAME, System.getenv(SAUCE_USERNAME));
         String sauceAccessKey = System.getProperty(SAUCE_ACCESS_KEY, System.getenv(SAUCE_ACCESS_KEY));
 
-        if (sauceAccessKey != null && sauceUsername != null) {
+        boolean isSauceLabs = sauceAccessKey != null && sauceUsername != null;
+        if (isSauceLabs) {
 
             log.info(String.format("Setting username '%s' and accessKey for saucelabs as capability", sauceUsername));
 
@@ -67,7 +68,10 @@ public class WebDriverBackend {
             }
         }).call();
 
-        driver.manage().window().maximize();
+
+        if (!isSauceLabs) {
+            driver.manage().window().maximize();
+        }
     }
 
     protected String url() {
