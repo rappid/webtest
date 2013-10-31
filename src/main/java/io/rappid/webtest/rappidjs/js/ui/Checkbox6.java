@@ -9,12 +9,12 @@ import org.openqa.selenium.WebElement;
  * Date: 31.10.13
  * Time: 14:58
  */
-public class Checkbox extends WebElementPanel{
-    public Checkbox(By by) {
+public class Checkbox6 extends WebElementPanel{
+    public Checkbox6(By by) {
         super(by);
     }
 
-    public Checkbox(WebElement element) {
+    public Checkbox6(WebElement element) {
         super(element);
     }
 
