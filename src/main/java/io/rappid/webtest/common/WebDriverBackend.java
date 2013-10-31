@@ -20,6 +20,8 @@ public class WebDriverBackend {
 
     public static final String SAUCE_ACCESS_KEY = "SAUCE_ACCESS_KEY";
     public static final String SAUCE_USERNAME = "SAUCE_USERNAME";
+    private static final String JOB_NAME = "JOB_NAME";
+    private static final String BUILD_NUMBER = "BUILD_NUMBER";
 
     private static final Logger log = LoggerFactory.getLogger(WebDriverBackend.class);
 
@@ -53,8 +55,19 @@ public class WebDriverBackend {
             capability.setCapability("accessKey", sauceAccessKey);
         }
 
-        setCapability(browser, capability);
+        String jobName = System.getProperty(JOB_NAME, System.getenv(JOB_NAME));
+        if (jobName != null) {
+            log.info(String.format("Setting job name to '%s'", jobName));
+            capability.setCapability("name", jobName);
+        }
 
+        String buildNumber = System.getProperty(BUILD_NUMBER, System.getenv(BUILD_NUMBER));
+        if (buildNumber != null) {
+            log.info(String.format("Setting build number to '%s'", buildNumber));
+            capability.setCapability("build", buildNumber);
+        }
+
+        setCapability(browser, capability);
 
         final URL hubUrl = new URL(url());
 
