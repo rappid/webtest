@@ -17,4 +17,20 @@ public class Checkbox extends WebElementPanel{
     public Checkbox(WebElement element) {
         super(element);
     }
+
+    public Boolean isChecked() {
+        return getWebElement().isSelected();
+    }
+
+    public void check() {
+        if (!isChecked()) {
+            getWebElement().click();
+        }
+    }
+
+    public void uncheck() {
+        if (isChecked()) {
+            getWebElement().click();
+        }
+    }
 }
