@@ -49,14 +49,6 @@ public abstract class PageObjectBase extends WebTestBase implements WebElement, 
         return driver().findElement(by);
     }
 
-    public <T> T waitUntil(Function<WebDriver, T> condition) {
-        return waitUntil(10, condition);
-    }
-
-    public <T> T waitUntil(int timeout, Function<WebDriver, T> condition) {
-        return new WebDriverWait(driver(), timeout).until(condition);
-    }
-
     protected abstract void validate();
 
     protected void navigate(String url) {
