@@ -60,7 +60,7 @@ public abstract class PageObjectBase extends WebTestBase implements WebElement, 
     }
 
     public WebElement getParent() {
-        return getChild(By.xpath("src/main"));
+        return getChild(By.xpath(".."));
     }
 
     public WebElement getChild(String cssSelector) {
