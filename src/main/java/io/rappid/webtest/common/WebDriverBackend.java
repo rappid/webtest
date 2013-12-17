@@ -82,9 +82,9 @@ public class WebDriverBackend {
         }).call();
 
 
-        if (!isSauceLabs) {
-            driver.manage().window().maximize();
-        }
+//        if (!isSauceLabs) {
+//            driver.manage().window().maximize();
+//        }
     }
 
     protected String url() {
