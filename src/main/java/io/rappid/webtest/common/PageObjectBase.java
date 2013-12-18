@@ -68,16 +68,17 @@ public abstract class PageObjectBase extends WebTestBase implements WebElement, 
     }
 
     public Boolean hasChild(By by) {
-        return getChildren(by).size() > 0;
-    }
-
-    public Boolean hasChild(String cssSelector) {
         try {
             webTest().disableImplicitlyWait();
-            return hasChild(By.cssSelector(cssSelector));
+            return getChildren(by).size() > 0;
         } finally {
             webTest().enableImplicitlyWait();
         }
+
+    }
+
+    public Boolean hasChild(String cssSelector) {
+        return hasChild(By.cssSelector(cssSelector));
     }
 
     public WebElement getChild(By by) {
